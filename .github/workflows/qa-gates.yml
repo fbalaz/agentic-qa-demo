@@ -7,7 +7,7 @@ on:
 
 jobs:
   contract-trace:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,7 +16,7 @@ jobs:
       - run: npm run gate:contract-trace
 
   assertion-diff:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
@@ -28,7 +28,7 @@ jobs:
           BASE_REF: origin/${{ github.base_ref }}
 
   sensitivity:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -38,7 +38,7 @@ jobs:
       - run: npm run gate:sensitivity
 
   evidence:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
