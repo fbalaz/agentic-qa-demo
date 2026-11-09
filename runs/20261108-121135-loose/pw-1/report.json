@@ -1,0 +1,233 @@
+{
+  "config": {
+    "configFile": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/playwright.config.ts",
+    "rootDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "runs/20261108-121135-loose/pw-1/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121135-loose/pw-1",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "checkout-01.spec.ts",
+      "file": "checkout-01.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "headphones basket",
+          "file": "checkout-01.spec.ts",
+          "line": 10,
+          "column": 8,
+          "specs": [
+            {
+              "title": "SAVE10 applies 10% to goods only (headphones basket)",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5487,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('order-total')\nExpected: \u001b[32m\"€\u001b[7m9\u001b[27m5.00\"\u001b[39m\nReceived: \u001b[31m\"€\u001b[7m10\u001b[27m5.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('order-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"order-total\">€105.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€105.00\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('order-total')\nExpected: \u001b[32m\"€\u001b[7m9\u001b[27m5.00\"\u001b[39m\nReceived: \u001b[31m\"€\u001b[7m10\u001b[27m5.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('order-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"order-total\">€105.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€105.00\"\u001b[22m\n\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:28:53",
+                        "location": {
+                          "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                          "column": 53,
+                          "line": 28
+                        },
+                        "snippet": "  26 |       await expect(page.getByText('Coupon SAVE10 applied')).toBeVisible();\n  27 |       await expect(page.getByTestId('shipping')).toHaveText('€5.00');\n> 28 |       await expect(page.getByTestId('order-total')).toHaveText(total);\n     |                                                     ^\n  29 |     });\n  30 |   });\n  31 | }"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                            "column": 53,
+                            "line": 28
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('order-total')\nExpected: \u001b[32m\"€\u001b[7m9\u001b[27m5.00\"\u001b[39m\nReceived: \u001b[31m\"€\u001b[7m10\u001b[27m5.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('order-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"order-total\">€105.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€105.00\"\u001b[22m\n\n\n  26 |       await expect(page.getByText('Coupon SAVE10 applied')).toBeVisible();\n  27 |       await expect(page.getByTestId('shipping')).toHaveText('€5.00');\n> 28 |       await expect(page.getByTestId('order-total')).toHaveText(total);\n     |                                                     ^\n  29 |     });\n  30 |   });\n  31 | }\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:28:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:12:03.096Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121135-loose/pw-1/checkout-01-headphones-bas-101fc-ods-only-headphones-basket-/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121135-loose/pw-1/checkout-01-headphones-bas-101fc-ods-only-headphones-basket-/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                        "column": 53,
+                        "line": 28
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "abdba27d2a7c8e430ed1-1ab6728a1163369b4820",
+              "file": "checkout-01.spec.ts",
+              "line": 22,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "small basket",
+          "file": "checkout-01.spec.ts",
+          "line": 10,
+          "column": 8,
+          "specs": [
+            {
+              "title": "SAVE10 applies 10% to goods only (small basket)",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5304,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('order-total')\nExpected: \u001b[32m\"€5\u001b[7m0\u001b[27m.00\"\u001b[39m\nReceived: \u001b[31m\"€5\u001b[7m5\u001b[27m.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('order-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"order-total\">€55.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€55.00\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('order-total')\nExpected: \u001b[32m\"€5\u001b[7m0\u001b[27m.00\"\u001b[39m\nReceived: \u001b[31m\"€5\u001b[7m5\u001b[27m.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('order-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"order-total\">€55.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€55.00\"\u001b[22m\n\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:28:53",
+                        "location": {
+                          "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                          "column": 53,
+                          "line": 28
+                        },
+                        "snippet": "  26 |       await expect(page.getByText('Coupon SAVE10 applied')).toBeVisible();\n  27 |       await expect(page.getByTestId('shipping')).toHaveText('€5.00');\n> 28 |       await expect(page.getByTestId('order-total')).toHaveText(total);\n     |                                                     ^\n  29 |     });\n  30 |   });\n  31 | }"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                            "column": 53,
+                            "line": 28
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('order-total')\nExpected: \u001b[32m\"€5\u001b[7m0\u001b[27m.00\"\u001b[39m\nReceived: \u001b[31m\"€5\u001b[7m5\u001b[27m.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('order-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"order-total\">€55.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€55.00\"\u001b[22m\n\n\n  26 |       await expect(page.getByText('Coupon SAVE10 applied')).toBeVisible();\n  27 |       await expect(page.getByTestId('shipping')).toHaveText('€5.00');\n> 28 |       await expect(page.getByTestId('order-total')).toHaveText(total);\n     |                                                     ^\n  29 |     });\n  30 |   });\n  31 | }\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:28:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:12:09.251Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121135-loose/pw-1/checkout-01-small-basket-S-204a7-to-goods-only-small-basket-/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121135-loose/pw-1/checkout-01-small-basket-S-204a7-to-goods-only-small-basket-/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                        "column": 53,
+                        "line": 28
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "abdba27d2a7c8e430ed1-d78d895a20a1d90571f0",
+              "file": "checkout-01.spec.ts",
+              "line": 22,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T12:12:02.637Z",
+    "duration": 12092.028,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

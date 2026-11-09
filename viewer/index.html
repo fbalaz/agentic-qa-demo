@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QA Night Shift</title>
+<style>
+  :root {
+    --bg: #0e1621; --surf: #182330; --surf2: #223042; --line: #33445a;
+    --text: #f1f5f9; --muted: #94a3b8; --green: #22c55e; --red: #f43f5e; --amber: #f5b83d; --blue: #60a5fa;
+    --req: #a78bfa; --data: #2dd4bf; --ui: #60a5fa; --exec: #e879f9; --rev: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 16px 24px; }
+  h1 { font-size: 22px; margin: 0 16px 0 0; }
+  #run { max-width: 460px; }
+  select, button { background: var(--surf2); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button.on { background: var(--blue); color: var(--bg); border-color: var(--blue); }
+  .badge { padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: .04em; border: 1.5px solid; }
+  .controls { display: flex; gap: 8px; align-items: center; padding: 0 24px 12px; flex-wrap: wrap; }
+  .controls .sep { width: 16px; }
+  main { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(300px, 1fr); gap: 16px; padding: 0 24px 24px; }
+  .card { background: var(--surf); border-radius: 12px; padding: 16px; }
+  .card h2 { font-size: 12px; letter-spacing: .14em; color: var(--muted); margin: 0 0 12px; text-transform: uppercase; }
+  .lanes { position: relative; }
+  .lane { display: grid; grid-template-columns: 130px 1fr; align-items: center; height: 44px; }
+  .lane .name { font-weight: 700; font-size: 15px; }
+  .track { position: relative; height: 28px; background: var(--bg); border-radius: 6px; }
+  .blk { position: absolute; top: 4px; height: 20px; border-radius: 4px; min-width: 3px; }
+  .mark { position: absolute; z-index: 2; top: 2px; transform: translateX(-50%); font-size: 13px; font-weight: 700; white-space: nowrap; padding: 2px 6px; border-radius: 4px; }
+  .playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--text); opacity: .6; pointer-events: none; }
+  .legend { display: flex; gap: 18px; margin-top: 12px; color: var(--muted); font-size: 13px; flex-wrap: wrap; }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+  .feed { margin-top: 16px; height: 330px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+  .ev { display: grid; grid-template-columns: 14px 140px 1fr; gap: 10px; align-items: start; font-size: 16px; padding: 6px 8px; border-radius: 6px; }
+  .ev .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 5px; }
+  .ev .who { color: var(--muted); font-size: 14px; padding-top: 1px; }
+  .ev.warn { background: rgba(245,184,61,.12); }
+  .ev.bad { background: rgba(244,63,94,.14); }
+  .ev.good { background: rgba(34,197,94,.12); }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 14px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: var(--bg); border-radius: 10px; padding: 12px; }
+  .stat .v { font-size: 34px; font-weight: 800; }
+  .stat .l { color: var(--muted); font-size: 13px; }
+  .stat.big { grid-column: span 2; }
+  .stat.big .v { font-size: 48px; color: var(--amber); }
+  .gates { display: flex; flex-direction: column; gap: 6px; }
+  .gate { display: flex; justify-content: space-between; gap: 8px; background: var(--bg); padding: 8px 12px; border-radius: 8px; font-size: 15px; }
+  .status { font-size: 26px; font-weight: 800; text-align: center; padding: 14px; border-radius: 10px; border: 2px solid; }
+  .decision { border: 2px solid var(--amber); }
+  .decision p { color: var(--muted); margin: 6px 0 12px; }
+  .decision .opts { display: flex; flex-direction: column; gap: 8px; }
+  .decision button { padding: 12px; font-size: 17px; font-weight: 700; }
+  .decision button.primary { background: var(--red); border-color: var(--red); color: white; }
+  .side { display: flex; flex-direction: column; gap: 16px; }
+  .hidden { display: none !important; }
+  table { width: 100%; border-collapse: collapse; font-size: 18px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--bg); }
+  th { color: var(--muted); font-size: 14px; }
+  #compare { margin: 0 24px 24px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>QA Night Shift · CHECKOUT-01</h1>
+  <select id="run" aria-label="Run"></select>
+  <span id="cfg" class="badge"></span>
+  <span id="src" class="badge"></span>
+  <span style="flex:1"></span>
+  <label style="color:var(--muted);font-size:14px">compare with</label>
+  <select id="cmp" aria-label="Compare with"><option value="">none</option></select>
+</header>
+<div class="controls">
+  <button id="play">▶ Play</button>
+  <button id="restart">⟲ Restart</button>
+  <span class="sep"></span>
+  <button data-speed="1">1×</button><button data-speed="2" class="on">2×</button><button data-speed="5">5×</button><button data-speed="0">End</button>
+  <span class="sep"></span>
+  <span id="clock" class="mono" style="color:var(--muted)"></span>
+</div>
+
+<section id="compare" class="card hidden">
+  <h2>Comparison</h2>
+  <table id="cmpTable"></table>
+</section>
+
+<main>
+  <div class="card">
+    <h2>Timeline</h2>
+    <div class="lanes" id="lanes"></div>
+    <div class="legend">
+      <span style="--c:var(--muted)">model call</span>
+      <span style="--c:var(--amber)">repeated work</span>
+      <span style="--c:var(--green)">suite passed</span>
+      <span style="--c:var(--red)">suite failed / denied / blocked</span>
+    </div>
+    <div class="feed" id="feed"></div>
+  </div>
+  <div class="side">
+    <div class="card">
+      <h2>The bill</h2>
+      <div class="stats">
+        <div class="stat big"><div class="v" id="sTokens">0</div><div class="l" id="sTokensL">tokens</div></div>
+        <div class="stat"><div class="v" id="sCost">$0.00</div><div class="l">cost</div></div>
+        <div class="stat"><div class="v" id="sSpec">0</div><div class="l">spec reads</div></div>
+        <div class="stat"><div class="v" id="sSuite">0</div><div class="l">suite runs</div></div>
+        <div class="stat"><div class="v" id="sFix">0</div><div class="l">test "repairs"</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Gates</h2>
+      <div class="gates" id="gates"><div style="color:var(--muted)">No gates in this configuration</div></div>
+    </div>
+    <div id="final" class="status hidden"></div>
+    <div id="decision" class="card decision hidden">
+      <h2>Human decision</h2>
+      <div id="dText" style="font-size:18px;font-weight:700"></div>
+      <p id="dEvidence"></p>
+      <div class="opts" id="dOpts"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const AGENTS = [
+  ["requirements", "Requirements", "var(--req)"], ["test_data", "Test Data", "var(--data)"], ["ui", "UI", "var(--ui)"],
+  ["execution", "Execution", "var(--exec)"], ["reviewer", "Reviewer", "var(--rev)"],
+];
+const COLOR = Object.fromEntries(AGENTS.map(([id, , c]) => [id, c]));
+const LABEL = Object.fromEntries(AGENTS.map(([id, l]) => [id, l]));
+const $ = (id) => document.getElementById(id);
+let gatesConfigured = true;
+let events = [], vts = [], total = 1, playhead = 0, idx = 0, playing = false, speed = 2, last = 0, runId = "", source = "";
+let st;
+
+async function getJSON(u, opts) { const r = await fetch(u, opts); return r.json(); }
+
+// Virtual time: replayed/scripted runs return model calls instantly, so their recorded latency is used.
+function virtualTimes(evs) {
+  const live = evs[0]?.source === "live";
+  let vt = 0, prev = 0;
+  return evs.map((e) => {
+    const dt = e.t - prev; prev = e.t;
+    vt += (e.type === "model_call" && !live) ? (e.latency_ms || 1500) : Math.max(0, dt);
+    return vt;
+  });
+}
+
+async function loadRuns() {
+  const runs = await getJSON("/api/runs");
+  const opts = runs.map((r) => `<option value="${r.id}">${r.id} · ${r.config} · ${r.source} · ${r.status}</option>`).join("");
+  $("run").innerHTML = opts || "<option>no runs yet</option>";
+  $("cmp").innerHTML = `<option value="">none</option>` + opts;
+  const wanted = new URLSearchParams(location.search).get("run");
+  if (wanted) $("run").value = wanted;
+  if (runs.length) await loadRun($("run").value);
+}
+
+async function loadRun(id) {
+  runId = id;
+  events = await getJSON(`/api/runs/${id}/events`);
+  vts = virtualTimes(events);
+  total = Math.max(1, vts.at(-1) || 1);
+  const start = events.find((e) => e.type === "run_start") || {};
+  source = start.source;
+  const isRules = (start.team || start.config) === "rules" || String(start.config).startsWith("rules");
+  gatesConfigured = isRules; // the loose team has no gates at all: an empty panel is part of the story
+  const noAC = Array.isArray(start.inputs) && !start.inputs.includes("acceptance-criteria");
+  $("cfg").textContent = (isRules ? "TEAM WITH RULES" : "LOOSE TEAM") + (noAC ? " · NO ACCEPTANCE CRITERIA" : "");
+  $("cfg").style.cssText = `color:${isRules ? "var(--green)" : "var(--amber)"};border-color:currentColor`;
+  // Two layers: where the agents' decisions come from, and that tests and gates were executed in this run.
+  const srcText = { live: "LIVE MODEL RUN · tests and gates executed in this run", replay: `AGENT DECISIONS REPLAYED FROM ${start.recorded_from || "A RECORDED RUN"} · tests and gates executed in this run`, scripted: "SCRIPTED REHEARSAL · NOT A MODEL RUN · tests and gates executed in this run" }[start.source] || start.source;
+  $("src").textContent = srcText;
+  $("src").style.cssText = `color:${start.source === "scripted" ? "var(--amber)" : "var(--blue)"};border-color:currentColor`;
+  restart();
+}
+
+function restart() {
+  playhead = 0; idx = 0; playing = false; $("play").textContent = "▶ Play";
+  st = { tokens: 0, cost: 0, costKnown: true, estimated: false, spec: 0, suite: 0, fix: 0, read: new Set(), wroteSinceRun: true };
+  $("lanes").innerHTML = AGENTS.map(([id, l, c]) =>
+    `<div class="lane"><div class="name" style="color:${c}">${l}</div><div class="track" id="tr-${id}"></div></div>`).join("") +
+    `<div class="lane"><div class="name" style="color:var(--muted)">Gates</div><div class="track" id="tr-gates"></div></div>` +
+    `<div class="playhead" id="ph"></div>`;
+  $("feed").innerHTML = ""; $("gates").innerHTML = `<div style="color:var(--muted)">${gatesConfigured ? "No gates yet" : "No gates in this configuration"}</div>`;
+  $("final").classList.add("hidden"); $("decision").classList.add("hidden");
+  renderStats(); advance(0);
+}
+
+const pct = (v) => `${(v / total) * 100}%`;
+
+function block(track, from, to, color, title, outline) {
+  const d = document.createElement("div");
+  d.className = "blk";
+  d.style.cssText = `left:${pct(from)};width:${pct(Math.max(to - from, total * 0.004))};background:${color};${outline ? "outline:2px solid var(--amber);" : ""}`;
+  d.title = title; $(track).appendChild(d);
+}
+function mark(track, at, text, color, bg) {
+  const d = document.createElement("div");
+  d.className = "mark"; d.textContent = text;
+  const shift = at / total > 0.85 ? "translateX(-100%)" : at / total < 0.08 ? "none" : "translateX(-50%)";
+  d.style.cssText = `left:${pct(at)};color:${color};background:${bg || "transparent"};transform:${shift};z-index:${bg ? 3 : 2}`;
+  $(track).appendChild(d);
+}
+function feed(agent, html, cls) {
+  const d = document.createElement("div");
+  d.className = `ev ${cls || ""}`;
+  d.innerHTML = `<div class="dot" style="background:${agent ? COLOR[agent] : "var(--muted)"}"></div><div class="who">${agent ? LABEL[agent] : "Orchestrator"}</div><div>${html}</div>`;
+  $("feed").appendChild(d); $("feed").scrollTop = $("feed").scrollHeight;
+}
+const esc = (s) => String(s ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const highlight = (s) => esc(s).replace(/\b(probably|PROBABLY|VERIFIES|outdated|whole[- ]order)\b/g, '<b style="color:var(--amber)">$1</b>');
+
+function apply(e, vt, i) {
+  const a = e.agent;
+  switch (e.type) {
+    case "agent_start": feed(a, `starts`); break;
+    case "model_call": {
+      st.tokens += (e.input_tokens || 0) + (e.cache_read_input_tokens || 0) + (e.cache_creation_input_tokens || 0) + (e.output_tokens || 0);
+      if (e.cost_usd == null) st.costKnown = false; else st.cost += e.cost_usd;
+      st.estimated ||= !!e.estimated;
+      block(`tr-${a}`, vt - (e.latency_ms || 1500), vt, COLOR[a], `${e.input_tokens} in / ${e.output_tokens} out`);
+      if (e.text) feed(a, `<i>“${highlight(e.text)}”</i>`);
+      break;
+    }
+    case "spec_read": {
+      const again = e.repeated ?? st.read.has(e.doc); st.read.add(e.doc); st.spec++;
+      if (again) mark(`tr-${a}`, vt, "re-read", "var(--bg)", "var(--amber)");
+      feed(a, `reads <b>${esc(e.doc)}</b>${again ? ' <b style="color:var(--amber)">again (already in its context)</b>' : ""}`, again ? "warn" : "");
+      break;
+    }
+    case "tool_call": {
+      if (e.tool === "write_test" && !e.is_error) st.wroteSinceRun = true;
+      if (["read_doc", "run_tests", "submit_handover", "submit_review"].includes(e.tool) || e.is_error) break;
+      const what = e.tool === "write_test" ? `writes <span class="mono">${esc(e.input?.file)}</span>` :
+        e.tool === "write_fixture" ? `writes fixture <span class="mono">${esc(e.input?.name)}</span>` :
+        e.tool === "propose_patch" ? `proposes a patch: ${esc(e.input?.reason)}` :
+        `<span class="mono">${esc(e.tool)}</span> ${esc(JSON.stringify(e.input)).slice(0, 80)}`;
+      feed(a, what); break;
+    }
+    case "test_run": {
+      st.suite++;
+      const rerun = e.n > 1 && !st.wroteSinceRun; st.wroteSinceRun = false;
+      const prev = vts[i - 1] ?? vt;
+      block(`tr-${a}`, prev, vt, e.failed ? "var(--red)" : "var(--green)", e.summary, rerun);
+      feed(a, `suite run #${e.n}: <b style="color:var(--green)">${e.passed} passed</b>, <b style="color:${e.failed ? "var(--red)" : "var(--muted)"}">${e.failed} failed</b>${rerun ? ' <b style="color:var(--amber)">(re-run, nothing changed)</b>' : ""}` +
+        (e.failures?.[0] ? `<div class="mono" style="color:var(--muted)">${esc(e.failures[0].message.split("\n").slice(0, 3).join(" "))}</div>` : ""), e.failed ? "bad" : "good");
+      break;
+    }
+    case "permission_denied":
+      mark(`tr-${a}`, vt, "🔒 denied", "white", "var(--red)");
+      feed(a, `🔒 <b>DENIED</b>: ${esc(e.summary)}`, "bad"); break;
+    case "note":
+      if (String(e.summary).startsWith("modified")) {
+        st.fix++;
+        const d = e.diff ? `expected ${esc(e.diff.before.join(", "))} → ${esc(e.diff.after.join(", "))}` : "";
+        mark(`tr-${a}`, vt, "✎ changed test", "white", "var(--red)");
+        feed(a, `✎ changes the test: <b style="color:var(--red)">${d}</b>`, "bad");
+      } else feed(a, esc(e.summary));
+      break;
+    case "handover":
+      feed(a, `${a === "reviewer" ? "verdict" : "hands over"}: ${highlight(e.summary)}`, a === "reviewer" ? (String(e.summary).startsWith("APPROVE") ? "good" : "bad") : "");
+      if (a === "reviewer") mark("tr-reviewer", vt, String(e.summary).startsWith("APPROVE") ? "✓ APPROVED" : "✗ REJECTED", "var(--bg)", String(e.summary).startsWith("APPROVE") ? "var(--green)" : "var(--red)");
+      break;
+    case "gate": {
+      if (!$("gates").querySelector(".gate")) $("gates").innerHTML = "";
+      const ok = e.result === "passed";
+      $("gates").insertAdjacentHTML("beforeend", `<div class="gate"><span class="mono">${esc(e.gate)}</span><b style="color:${ok ? "var(--green)" : "var(--red)"}">${ok ? "✓ passed" : "✗ BLOCKED"}</b></div>`);
+      mark("tr-gates", vt, ok ? "✓" : `✗ ${e.gate}`, ok ? "var(--green)" : "white", ok ? "" : "var(--red)");
+      feed(null, `gate <span class="mono">${esc(e.gate)}</span>: <b style="color:${ok ? "var(--green)" : "var(--red)"}">${ok ? "passed" : "BLOCKED"}</b> ${ok ? "" : esc(e.summary.replace(/^[^(]*\(/, "(")) }`, ok ? "" : "bad");
+      break;
+    }
+    case "human_decision_required":
+      {
+      const proposals = e.evidence?.proposals || [];
+      const blockedProposal = proposals.length > 0 || (e.evidence?.gates || []).some((g) => g.gate === "assertion-diff" && /proposal by/.test(String(g.reason || g.summary || "")));
+      const opts = [...(e.options || [])];
+      if (blockedProposal && !opts.includes("test_bug") && e.kind !== "clarify_requirement") opts.splice(1, 0, "test_bug");
+      $("dText").textContent = e.kind === "clarify_requirement" ? "The requirement is unclear. Clarify it before any test is written?"
+        : blockedProposal ? "An agent proposed a test change and a gate blocked it. Is the test wrong, or the product?"
+        : "Is this a bug in the product, or did the requirement change?";
+      const prop = proposals.length ? ` Proposal by ${proposals[0].by}: ${proposals[0].reason}` : "";
+      $("dEvidence").textContent = (e.evidence?.expected != null ? `Expected €${Number(e.evidence.expected).toFixed(2)}. ${e.summary}` : e.summary) + prop;
+      $("dOpts").innerHTML = opts.map((o, i) => `<button class="${i === 0 ? "primary" : ""}" data-decision="${esc(o)}">${esc(DECISION_LABELS[o] || o)}</button>`).join("");
+      }
+      $("decision").classList.remove("hidden");
+      break;
+    case "human_decision":
+      $("decision").classList.add("hidden");
+      feed(null, `👤 human decision: <b>${esc(e.decision)}</b> (${esc(e.by)})`, "warn");
+      showFinal(e.final_status); break;
+    case "run_end":
+      feed(null, `<b>${esc(e.summary)}</b>`, e.status === "green" ? "good" : "bad");
+      showFinal(e.status); break;
+  }
+}
+
+function showFinal(status) {
+  const f = $("final");
+  const map = { green: ["✓ PIPELINE GREEN", "var(--green)"], red: ["✗ PIPELINE RED · PRODUCT BUG", "var(--red)"], awaiting_human: ["✗ PIPELINE RED · WAITING FOR A HUMAN", "var(--red)"], blocked: ["✗ BLOCKED BY A GATE", "var(--red)"], needs_requirement_update: ["REQUIREMENT UPDATE NEEDED", "var(--amber)"], needs_test_fix: ["TEST FIX APPROVED · RE-RUN NEEDED", "var(--amber)"], needs_clarification: ["STOPPED · REQUIREMENT SENT FOR CLARIFICATION", "var(--amber)"], stopped: ["STOPPED BY A HUMAN", "var(--amber)"], error: ["ERROR", "var(--red)"] };
+  const [text, c] = map[status] || [status, "var(--muted)"];
+  f.textContent = text; f.style.cssText = `color:${c};border-color:${c}`; f.classList.remove("hidden");
+}
+
+function renderStats() {
+  $("sTokens").textContent = st.tokens.toLocaleString("en-US");
+  $("sTokensL").textContent = st.estimated ? "tokens (estimated, scripted)" : "tokens";
+  $("sCost").textContent = st.estimated ? "n/a" : st.costKnown ? `$${st.cost.toFixed(2)}` : "n/a";
+  $("sSpec").textContent = st.spec; $("sSuite").textContent = st.suite; $("sFix").textContent = st.fix;
+}
+
+function advance(to) {
+  playhead = Math.min(to, total);
+  while (idx < events.length && vts[idx] <= playhead) { apply(events[idx], vts[idx], idx); idx++; }
+  renderStats();
+  const ph = $("ph"); if (ph) ph.style.left = `calc(130px + (100% - 130px) * ${playhead / total})`;
+  $("clock").textContent = `${(playhead / 1000).toFixed(1)}s / ${(total / 1000).toFixed(1)}s (run time)`;
+  if (playhead >= total) { playing = false; $("play").textContent = "▶ Play"; }
+}
+
+function tick(now) {
+  if (!playing) return;
+  const dt = now - last; last = now;
+  advance(playhead + dt * speed);
+  if (playing) requestAnimationFrame(tick);
+}
+
+$("play").onclick = () => {
+  if (playhead >= total) restart();
+  playing = !playing; $("play").textContent = playing ? "⏸ Pause" : "▶ Play";
+  if (playing) { last = performance.now(); requestAnimationFrame(tick); }
+};
+$("restart").onclick = restart;
+document.querySelectorAll("[data-speed]").forEach((b) => b.onclick = () => {
+  document.querySelectorAll("[data-speed]").forEach((x) => x.classList.remove("on")); b.classList.add("on");
+  speed = Number(b.dataset.speed);
+  if (speed === 0) { advance(total); speed = 2; }
+});
+$("run").onchange = () => loadRun($("run").value);
+const DECISION_LABELS = { product_bug: "Bug in product", test_bug: "Test bug: apply the patch", requirement_changed: "Requirement changed", clarified: "Clarify with the product owner", stop: "Stop the run" };
+$("dOpts").addEventListener("click", async (ev) => {
+  const b = ev.target.closest("[data-decision]"); if (!b) return;
+  const r = await getJSON(`/api/runs/${runId}/decision`, { method: "POST", body: JSON.stringify({ decision: b.dataset.decision, by: "human" }) });
+  if (r.error) return alert(r.error);
+  events = await getJSON(`/api/runs/${runId}/events`); vts = virtualTimes(events); total = Math.max(1, vts.at(-1));
+  advance(total);
+});
+document.addEventListener("keydown", (e) => { if (e.code === "Space" && e.target.tagName !== "SELECT") { e.preventDefault(); $("play").click(); } });
+
+$("cmp").onchange = async () => {
+  const other = $("cmp").value;
+  if (!other) return $("compare").classList.add("hidden");
+  const [a, b] = await Promise.all([getJSON(`/api/runs/${runId}/report`), getJSON(`/api/runs/${other}/report`)]);
+  const name = (r) => `${String(r.config).startsWith("rules") ? "Team with rules" : "Loose team"}${String(r.config).endsWith("no-ac") ? " (no AC)" : ""}${String(r.config).endsWith("-trace") ? " (reviewer sees the page)" : ""}<div style="font-size:12px;color:var(--muted)">${r.run} · ${r.source}</div>`;
+  const row = (l, f) => `<tr><td style="color:var(--muted)">${l}</td><td>${f(a)}</td><td>${f(b)}</td></tr>`;
+  $("cmpTable").innerHTML = `<tr><th></th><th>${name(a)}</th><th>${name(b)}</th></tr>` +
+    row("Product bug caught", (r) => r.bug_caught ? '<b style="color:var(--green)">yes</b>' : '<b style="color:var(--red)">no</b>') +
+    row("Final status", (r) => r.status) +
+    row("Tokens", (r) => `${r.tokens.total.toLocaleString("en-US")}${r.tokens.estimated ? " (est.)" : ""}`) +
+    row("Cost", (r) => r.cost_usd == null ? "n/a" : `$${r.cost_usd.toFixed(2)}`) +
+    row("Spec reads", (r) => r.spec_reads) + row("Suite runs", (r) => r.suite_runs) + row("Test \"repairs\"", (r) => r.fix_loops) +
+    row("Human time", (r) => r.human_time_s == null ? "0 min" : `${r.human_time_s} s`);
+  $("compare").classList.remove("hidden");
+};
+
+loadRuns();
+</script>
+</body>
+</html>

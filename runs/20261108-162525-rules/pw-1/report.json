@@ -1,0 +1,147 @@
+{
+  "config": {
+    "configFile": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/playwright.config.ts",
+    "rootDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "runs/20261108-162525-rules/pw-1/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-162525-rules/pw-1",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "checkout-01.spec.ts",
+      "file": "checkout-01.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "SAVE10 gives 10% off goods; shipping stays; total 95",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5513,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('goods-total')\nExpected substring: \u001b[32m\"\u001b[7m9\u001b[27m0.00\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7m€10\u001b[27m0.00\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('goods-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"goods-total\">€100.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€100.00\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('goods-total')\nExpected substring: \u001b[32m\"\u001b[7m9\u001b[27m0.00\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7m€10\u001b[27m0.00\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('goods-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"goods-total\">€100.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€100.00\"\u001b[22m\n\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:24:49",
+                    "location": {
+                      "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                      "column": 49,
+                      "line": 24
+                    },
+                    "snippet": "  22 |   await page.getByTestId('apply-coupon').click();\n  23 |   await expect(page.getByText('Coupon SAVE10 applied')).toBeVisible();\n> 24 |   await expect(page.getByTestId('goods-total')).toContainText('90.00');\n     |                                                 ^\n  25 |   await expect(page.getByTestId('shipping')).toContainText('5.00');\n  26 |   await expect(page.getByTestId('order-total')).toHaveText('€95.00');\n  27 | });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                        "column": 49,
+                        "line": 24
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('goods-total')\nExpected substring: \u001b[32m\"\u001b[7m9\u001b[27m0.00\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7m€10\u001b[27m0.00\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('goods-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"goods-total\">€100.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€100.00\"\u001b[22m\n\n\n  22 |   await page.getByTestId('apply-coupon').click();\n  23 |   await expect(page.getByText('Coupon SAVE10 applied')).toBeVisible();\n> 24 |   await expect(page.getByTestId('goods-total')).toContainText('90.00');\n     |                                                 ^\n  25 |   await expect(page.getByTestId('shipping')).toContainText('5.00');\n  26 |   await expect(page.getByTestId('order-total')).toHaveText('€95.00');\n  27 | });\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:24:49"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T16:25:46.527Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-162525-rules/pw-1/checkout-01-SAVE10-gives-1-76390-ods-shipping-stays-total-95/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-162525-rules/pw-1/checkout-01-SAVE10-gives-1-76390-ods-shipping-stays-total-95/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                    "column": 49,
+                    "line": 24
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "abdba27d2a7c8e430ed1-c95694964d3a649d2979",
+          "file": "checkout-01.spec.ts",
+          "line": 19,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T16:25:46.061Z",
+    "duration": 6316.295,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

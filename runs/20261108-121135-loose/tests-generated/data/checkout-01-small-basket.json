@@ -1,0 +1,11 @@
+{
+  "owner": "qa-tests",
+  "items": [
+    {
+      "sku": "CABLE-001",
+      "name": "USB Cable",
+      "priceEur": 50
+    }
+  ],
+  "shippingEur": 5
+}

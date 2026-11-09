@@ -1,0 +1,11 @@
+{
+  "owner": "qa-tests",
+  "items": [
+    {
+      "sku": "HEADPHONES-001",
+      "name": "Headphones",
+      "priceEur": 100
+    }
+  ],
+  "shippingEur": 5
+}

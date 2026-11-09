@@ -1,0 +1,156 @@
+{
+  "config": {
+    "configFile": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/playwright.config.ts",
+    "rootDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "runs/20261108-121638-loose/pw-1/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121638-loose/pw-1",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "checkout-01.spec.ts",
+      "file": "checkout-01.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "CHECKOUT-01 SAVE10 coupon",
+          "file": "checkout-01.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "AC-1/AC-2/AC-3: SAVE10 shows confirmation and reduces goods by 10% only",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5556,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('goods-total')\nExpected: \u001b[32m\"€\u001b[7m9\u001b[27m0.00\"\u001b[39m\nReceived: \u001b[31m\"€\u001b[7m10\u001b[27m0.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('goods-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"goods-total\">€100.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€100.00\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('goods-total')\nExpected: \u001b[32m\"€\u001b[7m9\u001b[27m0.00\"\u001b[39m\nReceived: \u001b[31m\"€\u001b[7m10\u001b[27m0.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('goods-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"goods-total\">€100.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€100.00\"\u001b[22m\n\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:40:51",
+                        "location": {
+                          "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                          "column": 51,
+                          "line": 40
+                        },
+                        "snippet": "  38 |\n  39 |     // AC-2: 10% off goods (EUR 100 -> EUR 90).\n> 40 |     await expect(page.getByTestId(\"goods-total\")).toHaveText(\"€90.00\");\n     |                                                   ^\n  41 |\n  42 |     // AC-3: shipping is not discounted and the total is EUR 95.00.\n  43 |     await expect(page.getByTestId(\"shipping\")).toHaveText(\"€5.00\");"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                            "column": 51,
+                            "line": 40
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('goods-total')\nExpected: \u001b[32m\"€\u001b[7m9\u001b[27m0.00\"\u001b[39m\nReceived: \u001b[31m\"€\u001b[7m10\u001b[27m0.00\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('goods-total')\u001b[22m\n\u001b[2m    9 × locator resolved to <td class=\"num\" data-testid=\"goods-total\">€100.00</td>\u001b[22m\n\u001b[2m      - unexpected value \"€100.00\"\u001b[22m\n\n\n  38 |\n  39 |     // AC-2: 10% off goods (EUR 100 -> EUR 90).\n> 40 |     await expect(page.getByTestId(\"goods-total\")).toHaveText(\"€90.00\");\n     |                                                   ^\n  41 |\n  42 |     // AC-3: shipping is not discounted and the total is EUR 95.00.\n  43 |     await expect(page.getByTestId(\"shipping\")).toHaveText(\"€5.00\");\n    at /Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts:40:51"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:17:04.144Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121638-loose/pw-1/checkout-01-CHECKOUT-01-SA-40ece-nd-reduces-goods-by-10-only/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/runs/20261108-121638-loose/pw-1/checkout-01-CHECKOUT-01-SA-40ece-nd-reduces-goods-by-10-only/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/filip/Desktop/TU2026/tu2026/agentic-qa-demo/tests/generated/checkout-01.spec.ts",
+                        "column": 51,
+                        "line": 40
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "abdba27d2a7c8e430ed1-3382e6b5885807da84e8",
+              "file": "checkout-01.spec.ts",
+              "line": 27,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T12:17:03.674Z",
+    "duration": 6340.846,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

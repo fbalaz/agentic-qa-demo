@@ -1,0 +1,53 @@
+# Quality gates for tests written by the agent team. Each gate is its own job, so it shows up
+# as its own check on the pull request (slide "Quality gates live in the pipeline").
+name: qa-gates
+on:
+  pull_request:
+    paths: ["tests/generated/**", "contracts/**", "approvals/**"]
+
+jobs:
+  contract-trace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run gate:contract-trace
+
+  assertion-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run gate:assertion-diff
+        env:
+          BASE_REF: origin/${{ github.base_ref }}
+
+  sensitivity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run gate:sensitivity
+
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run gate:evidence
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: traces
+          path: test-results/**/trace.zip

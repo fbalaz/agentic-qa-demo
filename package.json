@@ -1,0 +1,39 @@
+{
+  "name": "agentic-qa-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Demo for the talk 'From Prompt to Pipeline: Building an Agentic QA Team'",
+  "scripts": {
+    "app": "tsx app/server.ts",
+    "app:bug": "DISCOUNT_BUG=1 PORT=3001 tsx app/server.ts",
+    "app:bug-shipping": "DISCOUNT_BUG=shipping PORT=3001 tsx app/server.ts",
+    "run:loose": "tsx orchestrator/run.ts --config loose",
+    "run:rules": "tsx orchestrator/run.ts --config rules",
+    "replay": "tsx orchestrator/run.ts --replay",
+    "measure": "tsx orchestrator/measure.ts",
+    "decide": "tsx orchestrator/decide.ts",
+    "viewer": "tsx viewer/server.ts",
+    "reset": "tsx scripts/reset.ts",
+    "recheck": "tsx scripts/recheck.ts",
+    "gate:contract-trace": "tsx gates/contract-trace.ts",
+    "gate:assertion-diff": "tsx gates/assertion-diff.ts",
+    "gate:sensitivity": "tsx gates/sensitivity.ts",
+    "gate:evidence": "tsx gates/evidence.ts",
+    "gates": "npm run gate:contract-trace && npm run gate:assertion-diff && npm run gate:sensitivity && npm run gate:evidence",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0",
+    "@playwright/test": "1.56.1",
+    "tsx": "^4.19.0",
+    "yaml": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

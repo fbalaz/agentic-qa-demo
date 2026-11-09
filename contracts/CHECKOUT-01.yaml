@@ -1,0 +1,14 @@
+# Handover contract for CHECKOUT-01, as produced by the Requirements Agent in the team with rules.
+# The CI gates read it: tests must name this requirement and assert its expected total.
+requirement_id: CHECKOUT-01
+source: [user-story-v3, ac-v2]
+expected:
+  goods_eur: 100
+  shipping_eur: 5
+  total_eur: 95
+assumptions:
+  - text: Shipping is excluded from the discount
+    status: confirmed
+    evidence: ac-v2#AC-3
+open_questions: []
+oracle: acceptance-criteria

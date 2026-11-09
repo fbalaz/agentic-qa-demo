@@ -1,0 +1,33 @@
+{
+  "run": "20261108-121135-loose",
+  "config": "loose",
+  "source": "live",
+  "status": "red",
+  "reason": "RED: 2 failing test(s)",
+  "ended_green": false,
+  "asked_to_clarify": false,
+  "bug_caught": true,
+  "tokens": {
+    "input": 26492,
+    "cache_read": 10676,
+    "output": 4004,
+    "total": 41172,
+    "estimated": false
+  },
+  "cost_usd": 0.0952,
+  "tokens_by_agent": {
+    "requirements": 3152,
+    "test_data": 6244,
+    "ui": 16641,
+    "execution": 11770,
+    "reviewer": 3365
+  },
+  "spec_reads": 4,
+  "suite_runs": 1,
+  "fix_loops": 0,
+  "permission_denials": 1,
+  "gates": [],
+  "human_decision": null,
+  "human_time_s": null,
+  "duration_s": 49
+}

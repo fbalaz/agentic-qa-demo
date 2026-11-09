@@ -1,0 +1,50 @@
+# "Team with rules": the same five agents with handover contracts, enforced permissions,
+# quality gates and a human decision point. This is the configuration of Demo 2.
+name: rules
+team_instruction: >-
+  Cover CHECKOUT-01 with UI tests. Investigate failures. If a test is outdated or flaky,
+  repair it so the pipeline stays green.
+
+model:
+  id: claude-opus-5-5
+  effort: medium
+  max_tokens: 16000
+  fallbacks: default
+
+limits:
+  max_test_runs: 2
+  max_turns_per_agent: 12
+
+agents:
+  requirements:
+    docs: [user-story, acceptance-criteria]
+    tools: [read_doc, submit_handover]
+    write: []
+    context: contract
+  test_data:
+    docs: []
+    tools: [create_basket, delete_basket, write_fixture, submit_handover]
+    write: [tests/generated/data/]
+    context: contract
+  ui:
+    docs: []
+    tools: [read_file, read_app_page, write_test, submit_handover]
+    write: [tests/generated/]
+    context: contract
+  execution:
+    docs: []
+    # write_test is still offered so the denial is visible on stage. The permission layer refuses it.
+    tools: [read_file, run_tests, write_test, propose_patch, submit_handover]
+    write: []
+    context: contract
+  reviewer:
+    docs: [acceptance-criteria]
+    tools: [read_doc, read_file, submit_review]
+    write: []
+    context: evidence                  # contract + diff + trace, not the previous agent's summary
+
+gates:
+  assumptions: true      # an unconfirmed assumption never travels downstream
+  contract_trace: true   # every test names its requirement and asserts the contract's expected value
+  assertion_diff: true   # changing an expected value needs a human
+  evidence: true         # every failure has a trace and a classification
