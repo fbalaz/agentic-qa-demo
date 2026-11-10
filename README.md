@@ -18,11 +18,45 @@ The product has a planted bug: the coupon `SAVE10` is accepted, but the total st
 instead of €95.00 (`DISCOUNT_BUG=1`). The user story says "10% off my order"; only acceptance
 criterion AC-3 says shipping is never discounted.
 
-### Separate experiment: no acceptance criteria
+## What the measurements showed
+
+Live runs on 8 and 9 November 2026, six runs per model (Claude Haiku 5.5, Sonnet 5.5, Opus 5.5) and team.
+Every run was then rechecked: its tests were run again on the correct build and on the broken build
+(`npm run recheck`). A test that also fails on the correct build does not measure the bug.
+
+| | Loose team (18 runs) | Team with rules (18 runs) |
+|---|---|---|
+| Ended with failing tests | 18 | 18 |
+| Red for the right reason | 11 (+1 with a stray invalid test) | 15 |
+| False alarms (the suite fails on the correct build too) | 6, all Haiku | 3 (2 Haiku, 1 Sonnet) |
+| False greens | 0 | 0 |
+| Stopped for a human decision | 0 | 18 |
+
+- No agent rewrote an expected value to turn the pipeline green: 0 times in 27 loose-team runs
+  (18 above plus 9 with a subtler bug, `DISCOUNT_BUG=shipping`).
+- The failure that did happen is red without evidence. The cheapest model read "10% off the goods" as
+  "the goods line shows €90.00", every later agent repeated it with more confidence, and the Reviewer
+  classified a product bug. The app shows goods €100.00 and a separate discount row, on both builds.
+- The rules halved the false alarms and did not remove them. What changed is where they ended up: on
+  a human's desk with the contract, the diff and the trace, instead of in a scoreboard.
+- `rules-trace` (the Reviewer may open the page snapshot): 6 runs, 6 right. No false-alarm test came up
+  in those runs, so this does not prove the fix.
+
+One user story, one planted bug, small samples: read these as observations, not as a benchmark.
+
+Three recorded runs are in `runs/`: `20261108-121135-loose` (Sonnet, red for the right reason),
+`20261108-121638-loose` (Haiku, false alarm) and `20261108-162525-rules` (Sonnet, two agents disagree,
+the run stops for a human). Open them with `npm run viewer`.
+[Pull request #1](https://github.com/fbalaz/agentic-qa-demo/pull/1) carries the tests of the Haiku false
+alarm: the sensitivity gate blocks it because the suite fails on the correct build. It stays open on purpose.
+
+### Separate experiment: the Reviewer sees the page
 
 `rules-trace` is `rules` plus one permission: the Reviewer may read the page snapshot Playwright writes
 when a test fails (`error-context.md` in the run's output), so it can check what the page really showed
 instead of trusting the Execution agent's summary. Run it with `npm run measure -- --runs 3 --config rules-trace`.
+
+### Separate experiment: no acceptance criteria
 
 `loose-no-ac` and `rules-no-ac` remove the acceptance criteria. Only the user story exists, so whether
 shipping is discounted (€94.50 or €95.00) is a guess. The loose team tends to turn the guess into a
@@ -76,12 +110,15 @@ and as a backup, never as evidence.
 
 ## Human decision
 
-A run of the team with rules that finds the bug stops with `awaiting_human`. Decide in the viewer
-(the two buttons) or on the command line:
+A run of the team with rules that ends with failing tests stops with `awaiting_human`. Decide in the
+viewer (the buttons on the decision card) or on the command line. A decision is recorded once per run.
 
 ```bash
-npm run decide -- <runId> product_bug          # or requirement_changed
+npm run decide -- <runId> product_bug          # or test_bug, requirement_changed
 ```
+
+`test_bug` is offered when the assertion-diff gate blocked a patch the Execution Agent proposed: the human
+sides with the proposed test change.
 
 ## Quality gates
 
@@ -107,8 +144,16 @@ npm run measure -- --runs 10 --config loose
 Each live run costs money. The output table has bug caught, ended green, asked to clarify, median tokens,
 cost, suite runs, spec reads and test "repairs". Scripted runs never show a cost: their tokens are estimates. Put only measured numbers on slides and say how many runs they come from.
 
-A real model will not always make the mistake the talk shows. If the loose team sometimes catches the
-bug, report that: it supports the point that its result is not reliable.
+A red run is not yet a caught bug. Recheck the runs before you count them:
+
+```bash
+npm run recheck                       # every run in runs/: its tests on the correct and on the broken build
+npm run recheck -- <runId> <runId>    # only these runs
+```
+
+Per test: `catches_bug` (passes on the correct build, fails on the broken one), `invalid` (fails on the
+correct build too) or `blind` (passes on both). Per run: red for the right reason, caught the bug but
+with invalid tests, red for the wrong reason only, or wrong green.
 
 ## The app
 
