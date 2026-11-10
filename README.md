@@ -36,7 +36,8 @@ Every run was then rechecked: its tests were run again on the correct build and 
   (18 above plus 9 with a subtler bug, `DISCOUNT_BUG=shipping`).
 - The failure that did happen is red without evidence. The cheapest model read "10% off the goods" as
   "the goods line shows €90.00", every later agent repeated it with more confidence, and the Reviewer
-  classified a product bug. The app shows goods €100.00 and a separate discount row, on both builds.
+  classified a product bug. The app shows Subtotal €100.00 on both builds and the discount as its own
+  row, so that test fails on the correct build too.
 - The rules halved the false alarms and did not remove them. What changed is where they ended up: on
   a human's desk with the contract, the diff and the trace, instead of in a scoreboard.
 - `rules-trace` (the Reviewer may open the page snapshot): 6 runs, 6 right. No false-alarm test came up
