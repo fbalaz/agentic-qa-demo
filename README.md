@@ -96,6 +96,13 @@ Every run is saved in `runs/<id>/`:
 - `pw-<n>/`: Playwright output and traces of each suite run (`npx playwright show-trace <path>`)
 - `tests-generated/`: the tests the agents wrote
 
+The cost in `report.json` is an estimate: the token counts the API returned, multiplied by the price
+list in `orchestrator/model.ts`. It is not an invoice. The three recorded runs were priced before the
+Sonnet cache-read price in that list was corrected from $0.20 to $0.10 per million tokens. The two
+Sonnet runs therefore show about 1% more than the corrected list gives: `20261108-121135-loose` is
+recorded as $0.0952 and comes to $0.0941, `20261108-162525-rules` is recorded as $0.0840 and comes to
+$0.0833. The recorded files are left as they were.
+
 ## Replay (for the stage)
 
 ```bash
